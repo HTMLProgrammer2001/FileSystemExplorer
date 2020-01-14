@@ -1,0 +1,21 @@
+.pointer{
+  cursor: pointer;
+}
+
+.folder{
+  max-height: 50vh;
+
+  overflow-y: scroll;
+}
+
+.file-content{
+  max-height: 50vh;
+
+  overflow-y: scroll;
+
+  word-wrap: break-word;
+}
+
+.link{
+  text-decoration: none !important;
+}
