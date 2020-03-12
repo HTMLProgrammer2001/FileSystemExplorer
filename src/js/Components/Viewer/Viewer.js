@@ -40,7 +40,7 @@ class Viewer extends React.Component{
                         viewState.path ?
                             <div className="d-flex justify-content-center">
 
-                                <a href={'http://explorer' + viewState.path} download target="_blank" className="w-100">
+                                <a href={'http://explorer/dist/php/file.php?path=' + viewState.path} download target="_blank" className="w-100">
                                     <div className="btn btn-primary btn-block mt-3">
 
                                         <i className="fas fa-download mx-2"></i>

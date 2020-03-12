@@ -24,7 +24,6 @@ export default (Elem) => {
 
         onTimer(path){
             this.props.toggleSelect();
-            this.props.toggleFile(path);
         }
 
         onMouseDown(path){

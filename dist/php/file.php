@@ -6,6 +6,6 @@ header('Access-Control-Expose-Headers: Content-Type, Origin');
 
 require('./FileSystem.php');
 
-$fileSystem = new FileSystem($_POST['path']);
+$fileSystem = new FileSystem($_GET['path']);
 
 echo $fileSystem->getFileContent();

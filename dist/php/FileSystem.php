@@ -63,4 +63,10 @@ class FileSystem
     public function getFileContent(){
         return file_get_contents($this->path);
     }
+
+    public static function delete($paths){
+        foreach ($paths as $path){
+            unlink($path);
+        }
+    }
 }

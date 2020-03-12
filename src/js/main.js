@@ -22,6 +22,6 @@ let store = createStore(reducers, composeWithDevTools(applyMiddleware(thunk)));
 let expPath = new URL(location.href).searchParams.get('path');
 ReactDOM.render(
         <Provider store={store}>
-            <Explorer path = {expPath || '/'}/>
+            <Explorer path = {expPath || './'}/>
         </Provider>,
     document.querySelector('#main'));

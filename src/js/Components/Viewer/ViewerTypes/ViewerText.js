@@ -33,13 +33,12 @@ class ViewerText extends React.Component{
     }
 
     async loadFile(){
-        let fileContent = await fetch('http://explorer/dist/php/file.php', {
-            method: 'POST',
+        let fileContent = await fetch('http://explorer/dist/php/file.php?path=' + this.props.path, {
+            method: 'GET',
             headers: {
                 'Content-Type': 'application/x-www-form-urlencoded'
             },
-            'mode': 'cors',
-            body: 'path=' + this.props.path
+            'mode': 'cors'
         });
 
         fileContent = await fileContent.text();
