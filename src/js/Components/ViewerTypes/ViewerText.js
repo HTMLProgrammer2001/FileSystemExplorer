@@ -10,11 +10,12 @@ class ViewerText extends React.Component{
     componentDidMount(){
         console.log(this.props.path);
 
-        fetch('file.php', {
+        fetch('http://explorer/dist/php/file.php', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/x-www-form-urlencoded'
             },
+            'mode': 'cors',
             body: 'path=' + this.props.path
         })
             .then(

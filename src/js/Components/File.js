@@ -1,3 +1,5 @@
+import {connect} from 'react-redux';
+
 import ItemHOC from 'js/ItemHOC';
 
 class File extends React.Component{
@@ -9,7 +11,8 @@ class File extends React.Component{
     }
 
     render(){
-        let className = (this.props.is_checked ? "active " : '') + "d-flex justify-content-between w-100 pointer list-group-item list-group-item-action",
+        let className = (this.props.isChecked ? "active " : '') + "d-flex justify-content-between w-100 pointer list-group-item list-group-item-action",
+            selectClass = this.props.isSelected ? 'fas fa-check-circle' : 'far fa-check-circle',
             icons = {
                 audio: 'far fa-file-audio',
                 image: 'far fa-image',
@@ -26,7 +29,10 @@ class File extends React.Component{
                 className={className}
                 onClick={this.clickHandler}>
 
-                    <i className={iconClass}></i>
+                    <div>
+                        <i className={iconClass}></i>
+                        {this.props.selectMode && <i className={selectClass}></i> }
+                    </div>
 
                     <div className="ml-3">
                         {this.props.name}
@@ -38,10 +44,13 @@ class File extends React.Component{
     }
 
     clickHandler(e){
-        !this.props.is_checked ? activeFile(this.props.path, this.findType(this.props.ext)) : activeFile(null, null);
+        if(this.selectMode)
+            return;
+
+        !this.props.isChecked ? activeFile(this.props.path, this.findType(this.props.ext)) : activeFile(null, null);
 
         this.props.Listener({
-            path: this.props.is_checked ? null : this.props.name,
+            path: this.props.isChecked ? null : this.props.name,
             isDir: false
         }, e);
     }
@@ -81,11 +90,13 @@ class File extends React.Component{
                 if(Array.isArray(e.findStr))
                     return e.findStr.find( (str) => ext == str);
 
-                return ext == e.findStr;
+                return ext === e.findStr;
             }) || typeImages.pop();
 
         return fileType.type;
     }
 }
 
-export default ItemHOC(File);
+export default connect((state) => ({
+    selectMode: state.select.selectMode
+}), null)(ItemHOC(File));

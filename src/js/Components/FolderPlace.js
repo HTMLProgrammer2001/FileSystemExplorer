@@ -72,10 +72,9 @@ class FolderPlace extends React.Component{
                             !state.files.value.length ? <div className="list-group-item border-0">Empty folder</div>
                                 :
                             [].map.call(state.files.value, (item, index) => {
-                                let isChecked = state.open.path === item.name ||
-                                    (this.props.selectMode &&
-                                        this.props.selectedFiles &&
-                                            this.props.selectedFiles.includes(path + item.name + '/'));
+                                let isSelected = this.props.selectMode && this.props.selectedFiles,
+
+                                isChecked = state.open.path === item.name;
 
                                 return item.isFolder ?
                                     <Folder
@@ -83,7 +82,11 @@ class FolderPlace extends React.Component{
                                         path = {path + item.name + '/'}
                                         key = {index}
                                         Listener = {_this.openListener}
-                                        is_checked = {isChecked}/>
+                                        isSelected = {
+                                            isSelected &&
+                                                this.props.selectedFiles.includes(path + item.name + '/')
+                                        }
+                                        isChecked = {isChecked}/>
                                             :
                                     <File
                                         name = {item.name}
@@ -91,7 +94,11 @@ class FolderPlace extends React.Component{
                                         ext = {item.type}
                                         key = {index}
                                         Listener = {_this.openListener}
-                                        is_checked = {isChecked}/>;
+                                        isSelected = {
+                                            isSelected &&
+                                                this.props.selectedFiles.includes(path + item.name)
+                                        }
+                                        isChecked = {isChecked}/>;
                         })}
                     </div>
                 </div>

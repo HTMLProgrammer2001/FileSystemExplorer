@@ -21,6 +21,8 @@ class Viewer extends React.Component{
         let viewState = this.state,
             ViewContent = Unknown;
 
+        console.log(viewState.path + ':' + viewState.type);
+
         if(viewState.type == 'image')
             ViewContent = Image;
         else if(viewState.type == 'video')
@@ -34,7 +36,7 @@ class Viewer extends React.Component{
             <div className="d-flex justify-content-center">
                 <div className="col-sm-8 mt-4" id="file_picker">
 
-                    {viewState.path ? <ViewContent path = {'http://explorer' + viewState.path}/> : ''}
+                    {viewState.path ? <ViewContent path = {viewState.path}/> : ''}
 
                     {
                         viewState.path ?
@@ -60,7 +62,6 @@ class Viewer extends React.Component{
     }
 
     activeFile(path, type){
-        console.log(path + ':' + type);
         this.setState({
             path,
             type

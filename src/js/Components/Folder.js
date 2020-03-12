@@ -1,3 +1,5 @@
+import {connect} from 'react-redux';
+
 import ItemHOC from 'js/ItemHOC';
 
 class Folder extends React.Component{
@@ -9,22 +11,29 @@ class Folder extends React.Component{
     }
 
     checkFold(e){
+        if(this.selectMode)
+            return;
 
-        this.props.is_checked ?
+        this.props.isChecked ?
             this.props.Listener({path: null, isDir: false}, e)
                 :
             this.props.Listener({path: this.props.name, isDir: true}, e);
     }
 
     render(){
-        let className = (this.props.is_checked ? 'active ' : '') + 'd-flex justify-content-between pointer list-group-item list-group-item-action';
+        let className = (this.props.isChecked ? 'active ' : '') + 'd-flex justify-content-between pointer list-group-item list-group-item-action',
+            selectClass = this.props.isSelected ? 'fas fa-check-circle' : 'far fa-check-circle';
 
         return (
             <a href={'?path=' + this.props.path} onClick={(e) => e.preventDefault()} className='link'>
                 <div
                 onClick = {(e) => this.checkFold(e)}
                 className={className}>
-                    <i className="fas fa-folder mr-2"></i>
+                    <div>
+                        <i className="fas fa-folder mr-2"></i>
+                        {this.props.selectMode && <i className={selectClass}></i> }
+                    </div>
+
                     <div className = "mr-5">{this.props.name}</div>
                     <i className="fas fa-sort-down fa-rotate-270"></i>
                 </div>
@@ -33,4 +42,8 @@ class Folder extends React.Component{
     }
 }
 
-export default ItemHOC(Folder);
+const stateToProps = (state) => ({
+   selectMode: state.select.selectMode
+});
+
+export default connect(stateToProps, null)(ItemHOC(Folder));
