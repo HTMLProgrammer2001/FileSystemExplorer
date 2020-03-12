@@ -9,4 +9,4 @@ import Explorer from './Components/Explorer';
 
 //init App
 let expPath = new URL(location.href).searchParams.get('path');
-ReactDOM.render(<Explorer path = {expPath || './'}/>, document.querySelector('#main'));
+ReactDOM.render(<Explorer path = {expPath || '/'}/>, document.querySelector('#main'));

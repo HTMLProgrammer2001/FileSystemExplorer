@@ -28,11 +28,12 @@ class FolderPlace extends React.Component{
     componentDidMount() {
         console.log(this.props.path);
 
-        fetch('tree.php', {
+        fetch('http://explorer/dist/php/tree.php', {
             method: 'POST',
             headers: {
               'Content-Type': 'application/x-www-form-urlencoded'
             },
+            mode: 'cors',
             body: 'path=' + this.props.path
         })
             .then(

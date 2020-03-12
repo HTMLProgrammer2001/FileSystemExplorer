@@ -1,11 +1,11 @@
-function ViewerAudio(){
+function ViewerAudio(props){
     return (
         (<div className="d-flex justify-content-center p-3 file-content">
             <audio
-                src = {this.props.path}
+                src = {props.path}
                 style = {{maxWidth: '100%'}}
                 controls>
-                Audio from {this.props.path}
+                Audio from {props.path}
             </audio>
         </div>)
     );
