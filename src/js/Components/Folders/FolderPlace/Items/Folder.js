@@ -1,5 +1,3 @@
-import {connect} from 'react-redux';
-
 import ItemHOC from 'js/ItemHOC';
 
 class Folder extends React.Component{
@@ -11,7 +9,7 @@ class Folder extends React.Component{
     }
 
     checkFold(e){
-        if(this.selectMode)
+        if(this.props.selectMode)
             return;
 
         this.props.isChecked ?
@@ -42,8 +40,4 @@ class Folder extends React.Component{
     }
 }
 
-const stateToProps = (state) => ({
-   selectMode: state.select.selectMode
-});
-
-export default connect(stateToProps, null)(ItemHOC(Folder));
+export default ItemHOC(Folder);

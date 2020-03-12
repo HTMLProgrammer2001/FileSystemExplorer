@@ -28,7 +28,7 @@ export default (Elem) => {
         }
 
         onMouseDown(path){
-            this.timer = setTimeout(this.onTimer, 1000, path);
+            this.timer = setTimeout(this.onTimer, 500, path);
         }
 
         onMouseUp(){

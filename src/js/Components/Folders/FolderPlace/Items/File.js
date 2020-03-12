@@ -1,5 +1,3 @@
-import {connect} from 'react-redux';
-
 import ItemHOC from 'js/ItemHOC';
 
 class File extends React.Component{
@@ -11,6 +9,8 @@ class File extends React.Component{
     }
 
     render(){
+        console.log(this.props);
+
         let className = (this.props.isChecked ? "active " : '') + "d-flex justify-content-between w-100 pointer list-group-item list-group-item-action",
             selectClass = this.props.isSelected ? 'fas fa-check-circle' : 'far fa-check-circle',
             icons = {
@@ -44,8 +44,10 @@ class File extends React.Component{
     }
 
     clickHandler(e){
-        if(this.selectMode)
+        if(this.props.selectMode)
             return;
+
+        console.log(this.props.selectMode);
 
         !this.props.isChecked ?
             activeFile(this.props.path, this.findType(this.props.ext))
@@ -100,6 +102,4 @@ class File extends React.Component{
     }
 }
 
-export default connect((state) => ({
-    selectMode: state.select.selectMode
-}), null)(ItemHOC(File));
+export default ItemHOC(File);

@@ -1,8 +1,7 @@
 import React from 'react';
-import {connect} from 'react-redux';
 
-import Folder from './Folder';
-import File from './File';
+import Folder from './Items/Folder';
+import File from './Items/File';
 
 require('babel-polyfill');
 
@@ -15,6 +14,9 @@ class FolderPlace extends React.Component{
 
         //ref on folder
         this.ref = React.createRef();
+
+        //abort controller on fetch
+        this.controller = null;
 
         this.state = {
             //active element
@@ -34,8 +36,11 @@ class FolderPlace extends React.Component{
 
     //Load files
     async componentDidMount() {
+        this.controller = new AbortController();
+
         let folderContent = await fetch('http://explorer/dist/php/tree.php', {
             method: 'POST',
+            signal: this.controller.signal,
             headers: {
               'Content-Type': 'application/x-www-form-urlencoded'
             },
@@ -48,6 +53,8 @@ class FolderPlace extends React.Component{
         this.setState( {
             files: folderContent
         });
+
+        this.controller = null;
     }
 
     componentDidUpdate(prevProps, prevState, snapshot) {
@@ -56,6 +63,11 @@ class FolderPlace extends React.Component{
             this.ref.current.style.overflowY = 'hidden';
         else
             this.ref.current.scrollTop = this.state.scrollTop;
+    }
+
+    componentWillUnmount() {
+        if(this.controller)
+            this.controller.abort();
     }
 
     render(){
@@ -73,7 +85,6 @@ class FolderPlace extends React.Component{
                                 :
                             [].map.call(state.files.value, (item, index) => {
                                 let isSelected = this.props.selectMode && this.props.selectedFiles,
-
                                 isChecked = state.open.path === item.name;
 
                                 return item.isFolder ?
@@ -82,6 +93,7 @@ class FolderPlace extends React.Component{
                                         path = {path + item.name + '/'}
                                         key = {index}
                                         Listener = {_this.openListener}
+                                        selectMode = {this.props.selectMode}
                                         isSelected = {
                                             isSelected &&
                                                 this.props.selectedFiles.includes(path + item.name + '/')
@@ -94,16 +106,21 @@ class FolderPlace extends React.Component{
                                         ext = {item.type}
                                         key = {index}
                                         Listener = {_this.openListener}
+                                        selectMode = {this.props.selectMode}
                                         isSelected = {
-                                            isSelected &&
-                                                this.props.selectedFiles.includes(path + item.name)
+                                             this.props.selectMode &&
+                                             this.props.selectedFiles.includes(path + item.name)
                                         }
                                         isChecked = {isChecked}/>;
                         })}
                     </div>
                 </div>
 
-                {(state.open.path && state.open.isDir) ? <FolderPlace path={path + state.open.path + '/'}/> : ''}
+                {(state.open.path && state.open.isDir) ?
+                    <FolderPlace
+                        {...this.props}
+                        path={path + state.open.path + '/'}
+                    /> : ''}
 
             </React.Fragment>
         );
@@ -123,9 +140,4 @@ class FolderPlace extends React.Component{
     }
 }
 
-const stateToProps = (state) => ({
-    selectMode: state.select.selectMode,
-    selectedFiles: state.select.selectedFiles
-});
-
-export default connect(stateToProps, null)(FolderPlace);
+export default FolderPlace;

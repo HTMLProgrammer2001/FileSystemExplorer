@@ -1,7 +1,7 @@
 import React from 'react';
 
-import Switcher from './Switcher';
-import Viewer from './Viewer';
+import Switcher from './Folders/Switcher';
+import Viewer from './Viewer/Viewer';
 
 function Explorer({path}){
     return (
