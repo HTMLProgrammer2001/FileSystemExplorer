@@ -3,35 +3,23 @@ class ViewerText extends React.Component{
         super(props);
 
         this.state = {
-            content: ''
+            content: '',
+            loaded: false
         }
     }
 
-    componentDidMount(){
-        console.log(this.props.path);
-
-        fetch('http://explorer/dist/php/file.php', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/x-www-form-urlencoded'
-            },
-            'mode': 'cors',
-            body: 'path=' + this.props.path
-        })
-            .then(
-                res => res.text()
-            )
-            .then(fileContent => {
-
-                this.setState( (prev) => {
-                    //save folder content
-                    return Object.assign({}, prev, {content: fileContent});
-                });
-
+    componentDidUpdate(prevProps){
+        if(prevProps.path !== this.props.path)
+            this.setState({
+                content: '',
+                loaded: false
             });
     }
 
     render(){
+        if(!this.state.loaded)
+            this.loadFile();
+
         return (
             <div className="d-flex justify-content-center border p-3 file-content">
                 <div
@@ -42,6 +30,24 @@ class ViewerText extends React.Component{
                 </div>
             </div>
         );
+    }
+
+    async loadFile(){
+        let fileContent = await fetch('http://explorer/dist/php/file.php', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded'
+            },
+            'mode': 'cors',
+            body: 'path=' + this.props.path
+        });
+
+        fileContent = await fileContent.text();
+
+        this.setState({
+            content: fileContent,
+            loaded: true
+        });
     }
 }
 

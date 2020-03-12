@@ -30,7 +30,7 @@ class File extends React.Component{
                 onClick={this.clickHandler}>
 
                     <div>
-                        <i className={iconClass}></i>
+                        <i className={iconClass + ' mr-1'}></i>
                         {this.props.selectMode && <i className={selectClass}></i> }
                     </div>
 
@@ -47,7 +47,10 @@ class File extends React.Component{
         if(this.selectMode)
             return;
 
-        !this.props.isChecked ? activeFile(this.props.path, this.findType(this.props.ext)) : activeFile(null, null);
+        !this.props.isChecked ?
+            activeFile(this.props.path, this.findType(this.props.ext))
+                :
+            activeFile(null, null);
 
         this.props.Listener({
             path: this.props.isChecked ? null : this.props.name,

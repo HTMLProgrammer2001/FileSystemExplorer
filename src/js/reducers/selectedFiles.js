@@ -25,11 +25,19 @@ export default (state = initialState, {type, payload}) => {
             });
 
         case SELECT_TOGGLE_FILE:
-            copy = Object.assign({}, state);
-            if(~copy.selectedFiles.indexOf(payload))
-                copy.selectedFiles.splice(copy.selectedFiles.indexOf(payload), 1);
+
+
+            if(!~state.selectedFiles.indexOf(payload))
+                copy = Object.assign({}, state, {
+                    selectedFiles: [...state.selectedFiles, payload]
+                });
             else
-                copy.selectedFiles.push(payload);
+                copy = Object.assign({}, state, {
+                   selectedFiles: [
+                       ...state.selectedFiles.slice(0, state.selectedFiles.indexOf(payload)),
+                       ...state.selectedFiles.slice(state.selectedFiles.indexOf(payload) + 1),
+                   ]
+                });
 
             if(!copy.selectedFiles.length)
                 copy.selectMode = false;

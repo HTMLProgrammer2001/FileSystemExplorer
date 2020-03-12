@@ -21,8 +21,6 @@ class Viewer extends React.Component{
         let viewState = this.state,
             ViewContent = Unknown;
 
-        console.log(viewState.path + ':' + viewState.type);
-
         if(viewState.type == 'image')
             ViewContent = Image;
         else if(viewState.type == 'video')
