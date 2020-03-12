@@ -9,8 +9,6 @@ class File extends React.Component{
     }
 
     render(){
-        console.log(this.props);
-
         let className = (this.props.isChecked ? "active " : '') + "d-flex justify-content-between w-100 pointer list-group-item list-group-item-action",
             selectClass = this.props.isSelected ? 'fas fa-check-circle' : 'far fa-check-circle',
             icons = {

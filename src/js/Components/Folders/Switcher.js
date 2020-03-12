@@ -7,6 +7,7 @@ function Switcher(props) {
     return (
         <div className="row m-3">
             <FolderPlace
+                key = {props.path}
                 {...props}
             />
         </div>

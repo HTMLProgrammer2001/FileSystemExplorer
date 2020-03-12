@@ -12,11 +12,11 @@ class FolderPlace extends React.Component{
         //Listener on files and folders
         this.openListener = this.openListener.bind(this);
 
-        //ref on folder
-        this.ref = React.createRef();
-
         //abort controller on fetch
         this.controller = null;
+
+        //ref on the component
+        this.ref = React.createRef();
 
         this.state = {
             //active element
@@ -63,6 +63,17 @@ class FolderPlace extends React.Component{
             this.ref.current.style.overflowY = 'hidden';
         else
             this.ref.current.scrollTop = this.state.scrollTop;
+
+        console.log(this.state.scrollTop);
+    }
+
+    componentWillUpdate(nextProps, nextState, nextContext) {
+        if(this.state.scrollTop === this.ref.current.scrollTop)
+            return;
+
+        this.setState({
+            scrollTop: this.ref.current.scrollTop
+        });
     }
 
     componentWillUnmount() {
@@ -76,9 +87,11 @@ class FolderPlace extends React.Component{
             _this = this;
 
         return (
-            <React.Fragment key={Math.round(Math.random()*100)}>
+            <React.Fragment>
 
-                <div className='folder mt-3 border' ref = {this.ref}>
+                <div
+                    className='folder mt-3 border'
+                    ref = {this.ref}>
                     <div className='pr-0 list-group'>
                         {
                             !state.files.value.length ? <div className="list-group-item border-0">Empty folder</div>
@@ -119,6 +132,7 @@ class FolderPlace extends React.Component{
                 {(state.open.path && state.open.isDir) ?
                     <FolderPlace
                         {...this.props}
+                        key = {path + state.open.path + '/'}
                         path={path + state.open.path + '/'}
                     /> : ''}
 
@@ -126,17 +140,11 @@ class FolderPlace extends React.Component{
         );
     }
 
-    openListener(open, event) {
-        let elem = event.currentTarget.parentElement.parentElement,
-            update = {
-                scrollTop: elem.scrollTop
-            };
-
+    openListener(open) {
         if(!this.props.selectMode)
-            update['open'] = open;
-
-        //save open path and scroll
-        this.setState(update);
+            this.setState({
+                open
+            });
     }
 }
 
