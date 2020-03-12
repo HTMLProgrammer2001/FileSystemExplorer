@@ -1,15 +1,13 @@
-import React, {Component} from 'react';
+import React from 'react';
 
 import FolderPlace from './FolderPlace';
 
-class Switcher extends Component{
-    render(){
-        return (
-            <div className="row m-3">
-                <FolderPlace path={this.props.path}/>
-            </div>
-        );
-    }
+function Switcher({path}) {
+    return (
+        <div className="row m-3">
+            <FolderPlace path={path}/>
+        </div>
+    );
 }
 
 export default Switcher;

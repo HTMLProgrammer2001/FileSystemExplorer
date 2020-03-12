@@ -1,3 +1,5 @@
+import ItemHOC from 'js/ItemHOC';
+
 class Folder extends React.Component{
     constructor(props){
         super(props);
@@ -20,11 +22,8 @@ class Folder extends React.Component{
         return (
             <a href={'?path=' + this.props.path} onClick={(e) => e.preventDefault()} className='link'>
                 <div
-                onClick = {
-                    (e) => this.checkFold(e)
-                } className={
-                    className
-                }>
+                onClick = {(e) => this.checkFold(e)}
+                className={className}>
                     <i className="fas fa-folder mr-2"></i>
                     <div className = "mr-5">{this.props.name}</div>
                     <i className="fas fa-sort-down fa-rotate-270"></i>
@@ -34,4 +33,4 @@ class Folder extends React.Component{
     }
 }
 
-export default Folder;
+export default ItemHOC(Folder);

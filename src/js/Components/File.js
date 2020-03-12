@@ -1,3 +1,5 @@
+import ItemHOC from 'js/ItemHOC';
+
 class File extends React.Component{
     constructor(props){
         super(props);
@@ -86,4 +88,4 @@ class File extends React.Component{
     }
 }
 
-export default File;
+export default ItemHOC(File);

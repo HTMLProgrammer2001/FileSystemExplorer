@@ -1,5 +1,10 @@
+import React from 'react';
+import {connect} from 'react-redux';
+
 import Folder from './Folder';
 import File from './File';
+
+require('babel-polyfill');
 
 class FolderPlace extends React.Component{
     constructor(props){
@@ -20,33 +25,28 @@ class FolderPlace extends React.Component{
             //scroll
             scrollTop: 0,
             //Folder content
-            files: []
+            files: {
+                value: [],
+                errors: ''
+            }
         }
     }
 
     //Load files
-    componentDidMount() {
-        console.log(this.props.path);
-
-        fetch('http://explorer/dist/php/tree.php', {
+    async componentDidMount() {
+        let folderContent = await fetch('http://explorer/dist/php/tree.php', {
             method: 'POST',
             headers: {
               'Content-Type': 'application/x-www-form-urlencoded'
             },
             mode: 'cors',
             body: 'path=' + this.props.path
-        })
-            .then(
-            res => res.json()
-            )
-            .then(folderContent => {
-                console.log(folderContent);
+        });
 
-                this.setState( (prev) => {
-                    //save folder content
-                    return Object.assign({}, prev, {files: folderContent});
-                });
+        folderContent = await folderContent.json();
 
+        this.setState( {
+            files: folderContent
         });
     }
 
@@ -69,16 +69,21 @@ class FolderPlace extends React.Component{
                 <div className='folder mt-3 border' ref = {this.ref}>
                     <div className='pr-0 list-group'>
                         {
-                            !state.files.length ? <div className="list-group-item border-0">Empty folder</div>
+                            !state.files.value.length ? <div className="list-group-item border-0">Empty folder</div>
                                 :
-                            [].map.call(state.files, function(item, index){
-                                return item.is_Folder ?
+                            [].map.call(state.files.value, (item, index) => {
+                                let isChecked = state.open.path === item.name ||
+                                    (this.props.selectMode &&
+                                        this.props.selectedFiles &&
+                                            this.props.selectedFiles.includes(path + item.name + '/'));
+
+                                return item.isFolder ?
                                     <Folder
                                         name = {item.name}
                                         path = {path + item.name + '/'}
                                         key = {index}
                                         Listener = {_this.openListener}
-                                        is_checked = {state.open.path == item.name}/>
+                                        is_checked = {isChecked}/>
                                             :
                                     <File
                                         name = {item.name}
@@ -86,7 +91,7 @@ class FolderPlace extends React.Component{
                                         ext = {item.type}
                                         key = {index}
                                         Listener = {_this.openListener}
-                                        is_checked = {state.open.path == item.name}/>;
+                                        is_checked = {isChecked}/>;
                         })}
                     </div>
                 </div>
@@ -98,17 +103,22 @@ class FolderPlace extends React.Component{
     }
 
     openListener(open, event) {
+        let elem = event.currentTarget.parentElement.parentElement,
+            update = {
+                scrollTop: elem.scrollTop
+            };
 
-        let elem = event.currentTarget.parentElement.parentElement;
+        if(!this.props.selectMode)
+            update['open'] = open;
 
         //save open path and scroll
-        this.setState((prev) => {
-            return Object.assign({}, prev, {
-                open: open,
-                scrollTop: elem.scrollTop
-            })
-        });
+        this.setState(update);
     }
 }
 
-export default FolderPlace;
+const stateToProps = (state) => ({
+    selectMode: state.select.selectMode,
+    selectedFiles: state.select.selectedFiles
+});
+
+export default connect(stateToProps, null)(FolderPlace);
