@@ -9,13 +9,27 @@ class Menu extends React.Component{
     }
 
     render() {
+
         return (
             <div className="d-flex justify-content-center">
                 <div className="d-flex col-sm-9 justify-content-between">
-                    <div className=''>Создать файл</div>
-                    <div className={this.props.selectedFiles.length ? '' : 'text-muted'} onClick={this.deleteItems}>Удалить</div>
-                    <div className={this.props.selectedFiles.length === 1 ? '' : 'text-muted'}>Переименовать</div>
-                    <div className={this.props.selectedFiles.length ? '' : 'text-muted'}>Переместить</div>
+                    <div className='menu-item w-100 border p-1 text-center'>Создать файл</div>
+
+                    <div
+                        className="menu-item w-100 border p-1 text-center {this.props.selectedFiles.length ? '' : 'text-muted'}"
+                        onClick={this.deleteItems}>
+                            Удалить
+                    </div>
+
+                    <div
+                        className="menu-item w-100 border p-1 text-center {this.props.selectedFiles.length === 1 ? '' : 'text-muted'}">
+                            Переименовать
+                    </div>
+
+                    <div
+                        className="menu-item w-100 border p-1 text-center {this.props.selectedFiles.length ? '' : 'text-muted'}">
+                            Переместить
+                    </div>
                 </div>
             </div>
         );

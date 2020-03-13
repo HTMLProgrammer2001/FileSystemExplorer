@@ -19,3 +19,13 @@
 .link{
   text-decoration: none !important;
 }
+
+.menu-item{
+    cursor: pointer;
+    transition: .2s;
+    
+    &:hover{
+        background: rgba(222, 226, 230, .5);
+        border: 1px solid #fff;
+    }
+}
