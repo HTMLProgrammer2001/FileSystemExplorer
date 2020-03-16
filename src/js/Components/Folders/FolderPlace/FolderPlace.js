@@ -1,7 +1,11 @@
 import React from 'react';
+import {connect} from "react-redux";
 
 import Folder from './Items/Folder';
 import File from './Items/File';
+import {
+    changePath
+} from "js/actions";
 
 require('babel-polyfill');
 
@@ -19,36 +23,39 @@ class FolderPlace extends React.Component{
         this.ref = React.createRef();
 
         this.state = {
-            //active element
-            open: {
-                path: null,
-                isDir: false
-            },
             //scroll
             scrollTop: 0,
             //Folder content
             files: {
                 value: [],
                 errors: ''
+            },
+
+            open: {
+              path: '',
+              isDir: false
             }
         }
     }
 
     //Load files
     async componentDidMount() {
+        this.props.changePath(this.props.path);
+
         this.controller = new AbortController();
 
-        let folderContent = await fetch('http://explorer/dist/php/tree.php', {
+        let folderContent = await fetch('http://explorer/dist/php/api.php', {
             method: 'POST',
             signal: this.controller.signal,
             headers: {
               'Content-Type': 'application/x-www-form-urlencoded'
             },
             mode: 'cors',
-            body: 'path=' + this.props.path
+            body: 'type=getFolderContent&path=' + this.props.path
         });
 
         folderContent = await folderContent.json();
+        console.log(folderContent);
 
         this.setState( {
             files: folderContent
@@ -63,8 +70,6 @@ class FolderPlace extends React.Component{
             this.ref.current.style.overflowY = 'hidden';
         else
             this.ref.current.scrollTop = this.state.scrollTop;
-
-        console.log(this.state.scrollTop);
     }
 
     componentWillUpdate(nextProps, nextState, nextContext) {
@@ -148,4 +153,8 @@ class FolderPlace extends React.Component{
     }
 }
 
-export default FolderPlace;
+const dispatchToProps = (dispatch) => ({
+   changePath: (path) => dispatch(changePath(path))
+});
+
+export default connect(null, dispatchToProps)(FolderPlace);

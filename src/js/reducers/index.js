@@ -2,9 +2,9 @@ import {combineReducers} from "redux";
 
 //import my reducers
 import select from './selectedFiles';
-import fileSystem from './fileSystem';
+import files from './files';
 
 export default combineReducers({
    select,
-    fileSystem
+    files
 });

@@ -1,0 +1,19 @@
+.: {
+    isDir,
+    name,
+    path
+    files: {
+        t.txt: {
+            isDir,
+            type,
+            name,
+            path
+            size ?
+        }
+    }
+}
+
+payload: {
+    path,
+    files
+}

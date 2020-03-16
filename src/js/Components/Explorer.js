@@ -7,7 +7,7 @@ import Menu from './Menu/';
 function Explorer({path}){
     return (
         <div>
-            <Switcher path = {path || './path'}/>
+            <Switcher path = {path}/>
             <Menu/>
             <Viewer/>
         </div>

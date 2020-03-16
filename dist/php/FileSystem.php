@@ -66,7 +66,41 @@ class FileSystem
 
     public static function delete($paths){
         foreach ($paths as $path){
-            unlink($path);
+            if(!file_exists($path)) {
+                echo "$path not exist";
+                continue;
+            }
+
+            if(is_dir($path))
+                rmdir($path);
+            else
+                unlink($path);
+        }
+    }
+
+    public static function create($path, $type){
+        if($type == 'file')
+            fopen($path, 'w');
+        else
+            mkdir($path);
+    }
+
+    public static function rename($from, $to){
+        if(!file_exists($from)) {
+            echo "$from not exist";
+            return;
+        }
+
+        rename($from, $to);
+    }
+    public static function move($paths, $to){
+        foreach ($paths as $path){
+            if(!file_exists($path)){
+                echo "$path not exist";
+                continue;
+            }
+
+            rename($path, $to . '/' . basename($path));
         }
     }
 }
