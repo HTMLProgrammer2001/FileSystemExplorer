@@ -2,6 +2,11 @@ import React from 'react';
 import {connect} from "react-redux";
 import classnames from 'classnames';
 
+import {
+    addFiles,
+    deleteFiles
+} from 'js/actions';
+
 class Menu extends React.Component{
     constructor(props){
         super(props);
@@ -68,6 +73,9 @@ class Menu extends React.Component{
            type: 'delete',
            paths: JSON.stringify(this.props.selectedFiles)
         });
+
+        this.props.dispatch(deleteFiles(this.props.selectedFiles));
+        this.props.dispatch();
     }
 
     async create(type){
@@ -82,6 +90,16 @@ class Menu extends React.Component{
            createType: type,
            path: this.props.selectedPath + fileName
         });
+
+        this.props.dispatch(addFiles({
+            path: this.props.selectedPath.split('/'),
+            value: [{
+                path: this.props.selectedPath + fileName + (type === 'file' ? '' : '/'),
+                name: fileName,
+                isDir: type !== 'file',
+                type: fileName.slice(fileName.lastIndexOf('.') + 1)
+            }]
+        }));
     }
 
     async renameItem(){
@@ -124,9 +142,9 @@ class Menu extends React.Component{
             body
         });
 
-        answer = await answer.text();
-
-        console.log(answer);
+        // answer = await answer.json();
+        // console.log(answer);
+        // return answer;
     }
 }
 

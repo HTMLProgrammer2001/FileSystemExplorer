@@ -1,41 +1,43 @@
+const R = require('ramda');
+
 import {
     FILES_ADD,
     FILES_DELETE,
     FILES_RENAME
 } from 'js/actionTypes';
 
+import {getDir} from "js/fileSelector";
+
 const initialState = {
-    files: {}
-};
-
-const getDir = (files, path) => {
-    return path.reduce((a, b, i, arr) => {
-        if(!a[b])
-            a[b] = {
-                name: b,
-                path: arr.slice(0, i + 1).join('/') + '/',
-                isDir: true,
-                files: {}
-            };
-
-        return a[b].files;
-    }, files);
+    value: {}
 };
 
 export default (state = initialState, {type, payload}) => {
-    let dir,
-        copy;
+    let dir;
 
     switch (type) {
         case FILES_ADD:
-            copy = Object.assign({}, state);
-            dir = getDir(copy.files, payload.path);
+            //link on the directory object
+            dir = getDir(state.value, payload.path);
 
-            payload.files.forEach((item) => {
+            payload.value.forEach((item) => {
                 dir[item.name] = item;
+
+                if(item.isDir)
+                    dir[item.name]['files'] = {};
             });
 
-            return copy;
+            return R.clone(state);
+
+        case FILES_DELETE:
+            //loop each file
+            payload.forEach((item) => {
+                //get link on the dir
+               dir = getDir(state.value, item.split('/'));
+               delete dir[item.split('/').filter((e) => e).pop()];
+            });
+
+            return R.clone(state);
 
         default:
             return state;

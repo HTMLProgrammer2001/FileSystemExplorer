@@ -44,12 +44,13 @@ class FileSystem
     //return hash table with info about dir item
     protected function getFileInfo($name, $path){
         $fileInfo = [
-            'name' => $name
+            'name' => $name,
+            'path' => $path
         ];
 
         //return dir info
         if(is_dir($path)){
-            $fileInfo['isFolder'] = true;
+            $fileInfo['isDir'] = true;
 
             return $fileInfo;
         }

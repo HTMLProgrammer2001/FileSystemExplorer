@@ -45,8 +45,6 @@ class File extends React.Component{
         if(this.props.selectMode)
             return;
 
-        console.log(this.props.selectMode);
-
         !this.props.isChecked ?
             activeFile(this.props.path, this.findType(this.props.ext))
                 :

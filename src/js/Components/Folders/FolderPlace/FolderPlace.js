@@ -4,8 +4,10 @@ import {connect} from "react-redux";
 import Folder from './Items/Folder';
 import File from './Items/File';
 import {
-    changePath
+    changePath,
+    addFiles
 } from "js/actions";
+import {getDir} from "js/fileSelector";
 
 require('babel-polyfill');
 
@@ -25,16 +27,14 @@ class FolderPlace extends React.Component{
         this.state = {
             //scroll
             scrollTop: 0,
-            //Folder content
-            files: {
-                value: [],
-                errors: ''
-            },
 
             open: {
               path: '',
               isDir: false
-            }
+            },
+
+            //files
+            loaded: false
         }
     }
 
@@ -55,11 +55,8 @@ class FolderPlace extends React.Component{
         });
 
         folderContent = await folderContent.json();
-        console.log(folderContent);
-
-        this.setState( {
-            files: folderContent
-        });
+        this.props.addFiles({...folderContent, path: folderContent.path.split('/')});
+        this.setState({loaded: true});
 
         this.controller = null;
     }
@@ -89,7 +86,7 @@ class FolderPlace extends React.Component{
     render(){
         let path = this.props.path,
             state = this.state,
-            _this = this;
+            files = getDir(this.props.files, this.props.path.split('/'));
 
         return (
             <React.Fragment>
@@ -99,18 +96,18 @@ class FolderPlace extends React.Component{
                     ref = {this.ref}>
                     <div className='pr-0 list-group'>
                         {
-                            !state.files.value.length ? <div className="list-group-item border-0">Empty folder</div>
+                            !Object.values(files).length ? <div className="list-group-item border-0">Empty folder</div>
                                 :
-                            [].map.call(state.files.value, (item, index) => {
+                            [].map.call(Object.values(files), (item, index) => {
                                 let isSelected = this.props.selectMode && this.props.selectedFiles,
                                 isChecked = state.open.path === item.name;
 
-                                return item.isFolder ?
+                                return item.isDir ?
                                     <Folder
                                         name = {item.name}
                                         path = {path + item.name + '/'}
                                         key = {index}
-                                        Listener = {_this.openListener}
+                                        Listener = {this.openListener}
                                         selectMode = {this.props.selectMode}
                                         isSelected = {
                                             isSelected &&
@@ -123,7 +120,7 @@ class FolderPlace extends React.Component{
                                         path = {path + item.name}
                                         ext = {item.type}
                                         key = {index}
-                                        Listener = {_this.openListener}
+                                        Listener = {this.openListener}
                                         selectMode = {this.props.selectMode}
                                         isSelected = {
                                              this.props.selectMode &&
@@ -146,6 +143,8 @@ class FolderPlace extends React.Component{
     }
 
     openListener(open) {
+        this.props.changePath(this.props.path + (open.path ? open.path : ''));
+
         if(!this.props.selectMode)
             this.setState({
                 open
@@ -153,8 +152,13 @@ class FolderPlace extends React.Component{
     }
 }
 
-const dispatchToProps = (dispatch) => ({
-   changePath: (path) => dispatch(changePath(path))
+const stateToProps = (state) => ({
+    files: state.files.value
 });
 
-export default connect(null, dispatchToProps)(FolderPlace);
+const dispatchToProps = (dispatch) => ({
+   changePath: (path) => dispatch(changePath(path)),
+    addFiles: (payload) => dispatch(addFiles(payload))
+});
+
+export default connect(stateToProps, dispatchToProps)(FolderPlace);
