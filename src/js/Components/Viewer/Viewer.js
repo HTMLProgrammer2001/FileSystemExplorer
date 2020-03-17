@@ -10,10 +10,12 @@ class Viewer extends React.Component{
         super(props);
 
         window.activeFile = this.activeFile.bind(this);
+        this.editModeChange = this.editModeChange.bind(this);
 
         this.state = {
             path: null,
-            type: null
+            type: null,
+            editMode: false
         }
     }
 
@@ -34,20 +36,30 @@ class Viewer extends React.Component{
             <div className="d-flex justify-content-center">
                 <div className="col-sm-8 mt-4" id="file_picker">
 
-                    {viewState.path ? <ViewContent path = {viewState.path}/> : ''}
+                    {viewState.path ? <ViewContent
+                        path = {viewState.path}
+                        editModeChange = {this.editModeChange}
+                        editMode = {this.state.editMode}/> : ''}
 
                     {
-                        viewState.path ?
-                            <div className="d-flex justify-content-center">
+                        viewState.path && !this.state.editMode ?
+                            <div className="d-flex justify-content-between">
 
-                                <a href={'http://explorer/dist/php/file.php?path=' + viewState.path} download target="_blank" className="w-100">
-                                    <div className="btn btn-primary btn-block mt-3">
+                                <a href={'http://explorer/dist/php/file.php?path=' + viewState.path} download target="_blank" className="w-100 m-3">
+                                    <div className="btn btn-primary w-100">
 
                                         <i className="fas fa-download mx-2"></i>
                                         <span>Download</span>
 
                                     </div>
                                 </a>
+
+                                <div
+                                    className="btn btn-primary w-100 m-3"
+                                    onClick={this.editModeChange}
+                                >
+                                    <span>Edit</span>
+                                </div>
 
                             </div>
                         :
@@ -64,6 +76,12 @@ class Viewer extends React.Component{
             path,
             type
         })
+    }
+
+    editModeChange(){
+        this.setState((prev) => ({
+          editMode: !prev.editMode
+        }));
     }
 }
 

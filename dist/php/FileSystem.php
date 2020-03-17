@@ -104,4 +104,10 @@ class FileSystem
             rename($path, $to . '/' . basename($path));
         }
     }
+
+    public static function save($path, $content){
+        $file = fopen($path, 'w');
+        fwrite($file, $content);
+        fclose($file);
+    }
 }

@@ -37,3 +37,6 @@ if($_POST['type'] === 'rename')
 
 if($_POST['type'] === 'move')
     FileSystem::move(json_decode($_POST['paths']), $_POST['to']);
+
+if($_POST['type'] === 'saveFileContent')
+    FileSystem::save($_POST['path'], $_POST['content']);
