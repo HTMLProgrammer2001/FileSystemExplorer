@@ -32,8 +32,12 @@ export default (state = initialState, {type, payload}) => {
         case FILES_DELETE:
             //loop each file
             payload.forEach((item) => {
+                let path = item.split('/').filter((e) => !!e);
+                //get parent dir of directory item
+                if(item.endsWith('/'))
+                    path.pop();
                 //get link on the dir
-               dir = getDir(state.value, item.split('/'));
+               dir = getDir(state.value, path);
                delete dir[item.split('/').filter((e) => e).pop()];
             });
 

@@ -31,3 +31,7 @@ export const deleteFiles = (payload) => (dispatch) => {
   dispatch({type: SELECT_CLEAR});
   dispatch({type: SELECT_TOGGLE_MODE});
 };
+
+export const renameFile = (payload) => (dispatch) => {
+  dispatch({type: FILES_DELETE, })
+};

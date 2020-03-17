@@ -75,12 +75,10 @@ class Menu extends React.Component{
         });
 
         this.props.dispatch(deleteFiles(this.props.selectedFiles));
-        this.props.dispatch();
     }
 
     async create(type){
         let fileName = prompt('Enter name');
-
         if(!fileName)
             return;
 
@@ -112,7 +110,9 @@ class Menu extends React.Component{
             type: 'rename',
             from: this.props.selectedFiles[0],
             to: newFileName
-        })
+        });
+
+        this.props.dispatch();
     }
 
     async moveItems(){
