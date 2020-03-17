@@ -44,12 +44,13 @@ class FileSystem
     //return hash table with info about dir item
     protected function getFileInfo($name, $path){
         $fileInfo = [
-            'name' => $name
+            'name' => $name,
+            'path' => $path
         ];
 
         //return dir info
         if(is_dir($path)){
-            $fileInfo['isFolder'] = true;
+            $fileInfo['isDir'] = true;
 
             return $fileInfo;
         }
@@ -62,5 +63,51 @@ class FileSystem
 
     public function getFileContent(){
         return file_get_contents($this->path);
+    }
+
+    public static function delete($paths){
+        foreach ($paths as $path){
+            if(!file_exists($path)) {
+                echo "$path not exist";
+                continue;
+            }
+
+            if(is_dir($path))
+                rmdir($path);
+            else
+                unlink($path);
+        }
+    }
+
+    public static function create($path, $type){
+        if($type == 'file')
+            fopen($path, 'w');
+        else
+            mkdir($path);
+    }
+
+    public static function rename($from, $to){
+        if(!file_exists($from)) {
+            echo "$from not exist";
+            return;
+        }
+
+        rename($from, $to);
+    }
+    public static function move($paths, $to){
+        foreach ($paths as $path){
+            if(!file_exists($path)){
+                echo "$path not exist";
+                continue;
+            }
+
+            rename($path, $to . '/' . basename($path));
+        }
+    }
+
+    public static function save($path, $content){
+        $file = fopen($path, 'w');
+        fwrite($file, $content);
+        fclose($file);
     }
 }

@@ -4,7 +4,8 @@ import classnames from 'classnames';
 
 import {
     addFiles,
-    deleteFiles
+    deleteFiles,
+    renameFile
 } from 'js/actions';
 
 class Menu extends React.Component{
@@ -112,7 +113,10 @@ class Menu extends React.Component{
             to: newFileName
         });
 
-        this.props.dispatch();
+        this.props.dispatch(renameFile({
+            from: this.props.selectedFiles[0],
+            to: newFileName
+        }));
     }
 
     async moveItems(){
@@ -141,10 +145,6 @@ class Menu extends React.Component{
             mode: 'cors',
             body
         });
-
-        // answer = await answer.json();
-        // console.log(answer);
-        // return answer;
     }
 }
 

@@ -1,4 +1,4 @@
-.pointer{cursor:pointer}.folder{max-height:50vh;overflow-y:scroll}.file-content{max-height:50vh;overflow-y:scroll;word-wrap:break-word}.link{text-decoration:none !important}
+.pointer{cursor:pointer}.folder{max-height:50vh;overflow-y:scroll}.file-content{max-height:50vh;overflow-y:scroll;word-wrap:break-word}.link{text-decoration:none !important}.menu-item{cursor:pointer;transition:.2s}.menu-item:hover{background:rgba(222,226,230,0.5);border:1px solid #fff}
 /*!
  * Bootstrap v4.4.1 (https://getbootstrap.com/)
  * Copyright 2011-2019 The Bootstrap Authors

@@ -13,7 +13,9 @@ const initialState = {
 };
 
 export default (state = initialState, {type, payload}) => {
-    let dir;
+    let dir,
+        path,
+        copy;
 
     switch (type) {
         case FILES_ADD:
@@ -32,7 +34,7 @@ export default (state = initialState, {type, payload}) => {
         case FILES_DELETE:
             //loop each file
             payload.forEach((item) => {
-                let path = item.split('/').filter((e) => !!e);
+                path = item.split('/').filter((e) => !!e);
                 //get parent dir of directory item
                 if(item.endsWith('/'))
                     path.pop();
@@ -40,6 +42,20 @@ export default (state = initialState, {type, payload}) => {
                dir = getDir(state.value, path);
                delete dir[item.split('/').filter((e) => e).pop()];
             });
+
+            return R.clone(state);
+
+        case FILES_RENAME:
+            //find file dir
+            path = payload.from.split('/').filter((e) => !!e);
+            dir = getDir(state.value, path);
+            //copy file
+            copy = R.clone(dir[path.reverse()[0]]);
+            //delete old file
+            delete dir[path[0]];
+            //set new file
+            copy['name'] = payload.to;
+            dir[payload.to] = copy;
 
             return R.clone(state);
 

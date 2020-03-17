@@ -3,7 +3,10 @@ import {
     SELECT_TOGGLE_MODE,
     CHANGE_PATH,
     FILES_ADD,
-    FILES_DELETE, SELECT_CLEAR
+    FILES_DELETE,
+    SELECT_CLEAR,
+    FILES_RENAME,
+    FILES_MOVE
 } from './actionTypes';
 
 export const toggleSelect = () => (dispatch) => {
@@ -33,5 +36,13 @@ export const deleteFiles = (payload) => (dispatch) => {
 };
 
 export const renameFile = (payload) => (dispatch) => {
-  dispatch({type: FILES_DELETE, })
+  dispatch({type: FILES_RENAME, payload});
+  dispatch({type: SELECT_CLEAR});
+  dispatch({type: SELECT_TOGGLE_MODE});
+};
+
+export const moveFiles = (payload) => (dispatch) => {
+  dispatch({type: FILES_MOVE, payload});
+  dispatch({type: SELECT_CLEAR});
+  dispatch({type: SELECT_TOGGLE_MODE});
 };

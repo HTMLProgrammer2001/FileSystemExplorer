@@ -22,7 +22,7 @@ export default (Elem) => {
             this.onClick = this.onClick.bind(this, props.path);
         }
 
-        onTimer(path){
+        onTimer(){
             this.props.toggleSelect();
         }
 
