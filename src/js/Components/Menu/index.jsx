@@ -10,13 +10,13 @@ import {
 import CreateFile from './Buttons/CreateFile';
 import CreateFolder from './Buttons/CreateFolder';
 import DeleteFiles from './Buttons/DeleteFiles';
+import RenameFile from './Buttons/RenameFile';
 
 class Menu extends React.Component{
     constructor(props){
         super(props);
 
         //bind functions to this context
-        this.renameItem = this.renameItem.bind(this);
         this.moveItems = this.moveItems.bind(this);
     }
 
@@ -28,17 +28,7 @@ class Menu extends React.Component{
                     <CreateFile/>
                     <CreateFolder/>
                     <DeleteFiles/>
-
-                    <div
-                        className={
-                            classnames('menu-item w-100 border p-1 text-center', {
-                                'text-muted': this.props.selectedFiles.length !== 1
-                            })
-                        }
-                        onClick={this.renameItem}
-                        >
-                            Переименовать
-                    </div>
+                    <RenameFile/>
 
                     <div
                         className={
@@ -53,24 +43,6 @@ class Menu extends React.Component{
                 </div>
             </div>
         );
-    }
-
-    async renameItem(){
-        if(this.props.selectedFiles.length !== 1)
-            return;
-
-        let newFileName = prompt('Enter new name');
-
-        await this.fetchApi({
-            type: 'rename',
-            from: this.props.selectedFiles[0],
-            to: newFileName
-        });
-
-        this.props.dispatch(renameFile({
-            from: this.props.selectedFiles[0],
-            to: newFileName
-        }));
     }
 
     async moveItems(){

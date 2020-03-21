@@ -66,18 +66,30 @@ class FileSystem
     }
 
     public static function delete($paths){
-        if(is_array($paths))
-
-        foreach ($paths as $path){
-            if(!file_exists($path)) {
-                echo "$path not exist";
-                continue;
+        if(is_array($paths)){
+            //loop array of paths
+            foreach($paths as $path){
+                self::delete($path);
             }
+        }
+        else{
+            //start delete recursion
+            if(is_file($paths))
+                unlink($paths);
+            else{
+                $dir = opendir($paths);
 
-            if(is_dir($path))
-                rmdir($path);
-            else
-                unlink($path);
+                while($file = readdir($dir)){
+                    //exclude link on the current and parent dir
+                    if($file == '.' || $file == '..')
+                        continue;
+
+                    self::delete($paths . '/' . $file);
+                }
+
+                closedir($dir);
+                rmdir($paths);
+            }
         }
     }
 
