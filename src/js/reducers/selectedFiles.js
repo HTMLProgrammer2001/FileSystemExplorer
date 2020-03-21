@@ -14,7 +14,8 @@ const initialState = {
 };
 
 export default (state = initialState, {type, payload}) => {
-    let copy;
+    let copy,
+        index;
 
     switch (type) {
         case CHANGE_PATH:
@@ -34,15 +35,16 @@ export default (state = initialState, {type, payload}) => {
             });
 
         case SELECT_TOGGLE_FILE:
-            if(!~state.selectedFiles.indexOf(payload))
+            index = state.selectedFiles.findIndex((item) => item.path === payload.path);
+            if(!~index)
                 copy = Object.assign({}, state, {
                     selectedFiles: [...state.selectedFiles, payload]
                 });
             else
                 copy = Object.assign({}, state, {
                    selectedFiles: [
-                       ...state.selectedFiles.slice(0, state.selectedFiles.indexOf(payload)),
-                       ...state.selectedFiles.slice(state.selectedFiles.indexOf(payload) + 1),
+                       ...state.selectedFiles.slice(0, index),
+                       ...state.selectedFiles.slice(index + 1),
                    ]
                 });
 

@@ -2,7 +2,7 @@ import {connect} from "react-redux";
 import classnames from 'classnames';
 
 import {
-    moveFile
+    moveFiles
 } from "js/actions";
 import fetchApi from 'js/api';
 
@@ -20,7 +20,7 @@ function MoveFile(props){
             type: 'move'
         });
 
-        props.dispatch(moveFile({
+        props.dispatch(moveFiles({
             from: props.selectedFiles,
             to: newPlace
         }))

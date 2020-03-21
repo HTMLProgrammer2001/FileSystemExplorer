@@ -71,13 +71,14 @@ export default (state = initialState, {type, payload}) => {
             //find file dir
             payload.from.forEach((item) => {
                 path = item.path.split('/').filter((e) => !!e);
+                if(item.isDir)
+                    path.pop();
                 dir = getDir(state.value, path);
                 //copy file
-                copy = R.clone(dir[path.reverse()[0]]);
+                copy = R.clone(dir[item.name]);
                 //delete old file
-                delete dir[path[0]];
+                delete dir[item.name];
                 //set new file
-                copy['name'] = payload.to;
                 copy['path'] =
                     payload.to + (payload.to.endsWith('/') ? '' : '/') + item.name + (item.isDir ? '/' : '');
 
