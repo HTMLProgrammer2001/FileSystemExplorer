@@ -3,7 +3,8 @@ const R = require('ramda');
 import {
     FILES_ADD,
     FILES_DELETE,
-    FILES_RENAME
+    FILES_RENAME,
+    FILES_MOVE
 } from 'js/actionTypes';
 
 import {getDir} from "js/fileSelector";
@@ -48,16 +49,42 @@ export default (state = initialState, {type, payload}) => {
         case FILES_RENAME:
             //find file dir
             path = payload.from.path.split('/').filter((e) => !!e);
+            if(payload.from.isDir)
+                path.pop();
             dir = getDir(state.value, path);
             //copy file
-            copy = R.clone(dir[path.reverse()[0]]);
+            copy = R.clone(dir[payload.from.name]);
             //delete old file
-            delete dir[path[0]];
+            delete dir[payload.from.name];
             //set new file
             copy['name'] = payload.to;
             copy['path'] =
-                copy.path.split('/').filter((e)=>!!e).slice(0, -1).join('/') + '/' + payload.to + copy.isDir ? '/' : '';
+                copy.path.split('/')
+                    .filter((e)=>!!e)
+                    .slice(0, -1)
+                    .join('/') + '/' + payload.to + (copy.isDir ? '/' : '');
             dir[payload.to] = copy;
+
+            return R.clone(state);
+
+        case FILES_MOVE:
+            //find file dir
+            payload.from.forEach((item) => {
+                path = item.path.split('/').filter((e) => !!e);
+                dir = getDir(state.value, path);
+                //copy file
+                copy = R.clone(dir[path.reverse()[0]]);
+                //delete old file
+                delete dir[path[0]];
+                //set new file
+                copy['name'] = payload.to;
+                copy['path'] =
+                    payload.to + (payload.to.endsWith('/') ? '' : '/') + item.name + (item.isDir ? '/' : '');
+
+                //find new path
+                dir = getDir(state.value, payload.to.split('/').filter((e) => !!e));
+                dir[item.name] = copy;
+            });
 
             return R.clone(state);
 
