@@ -99,8 +99,7 @@ class FolderPlace extends React.Component{
                             !Object.values(files).length ? <div className="list-group-item border-0">Empty folder</div>
                                 :
                             [].map.call(Object.values(files), (item, index) => {
-                                let isSelected = this.props.selectMode && this.props.selectedFiles,
-                                isChecked = state.open.path === item.name;
+                                let isChecked = state.open.path === item.name;
 
                                 return item.isDir ?
                                     <Folder
@@ -110,12 +109,6 @@ class FolderPlace extends React.Component{
                                         Listener = {this.openListener}
                                         selectMode = {this.props.selectMode}
                                         isDir = {item.isDir}
-                                        isSelected = {
-                                            isSelected &&
-                                                ~this.props.selectedFiles.findIndex((e) => {
-                                                    return path + item.name + '/' === e.path;
-                                                })
-                                        }
                                         isChecked = {isChecked}/>
                                             :
                                     <File
@@ -126,12 +119,6 @@ class FolderPlace extends React.Component{
                                         Listener = {this.openListener}
                                         selectMode = {this.props.selectMode}
                                         isDir = {item.isDir}
-                                        isSelected = {
-                                             this.props.selectMode &&
-                                             ~this.props.selectedFiles.findIndex((e) => {
-                                                 return path + item.name === e.path;
-                                             })
-                                        }
                                         isChecked = {isChecked}/>;
                         })}
                     </div>

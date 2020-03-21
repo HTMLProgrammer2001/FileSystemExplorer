@@ -1,5 +1,4 @@
 import React from 'react';
-import {connect} from 'react-redux';
 
 import FolderPlace from './FolderPlace/FolderPlace';
 
@@ -14,9 +13,4 @@ function Switcher(props) {
     );
 }
 
-const stateToProps = (state) => ({
-   selectMode: state.select.selectMode,
-   selectedFiles: state.select.selectedFiles
-});
-
-export default connect(stateToProps, null)(Switcher);
+export default Switcher;

@@ -12,20 +12,14 @@ export default (Elem) => {
         constructor(props){
             super(props);
 
-            let obj = {
-                path: props.path,
-                name: props.name,
-                isDir: props.isDir
-            };
-
             //select mode timer
             this.timer = null;
 
             //bind func
             this.onTimer = this.onTimer.bind(this);
-            this.onMouseDown = this.onMouseDown.bind(this, obj);
+            this.onMouseDown = this.onMouseDown.bind(this);
             this.onMouseUp = this.onMouseUp.bind(this);
-            this.onClick = this.onClick.bind(this, obj);
+            this.onClick = this.onClick.bind(this);
         }
 
         onTimer(){
@@ -41,9 +35,15 @@ export default (Elem) => {
                 clearTimeout(this.timer);
         }
 
-        onClick(itemObj){
+        onClick(){
+            let obj = {
+                path: this.props.path,
+                name: this.props.name,
+                isDir: this.props.isDir
+            };
+
             if(this.props.selectMode)
-                this.props.toggleFile(itemObj);
+                this.props.toggleFile(obj);
         }
 
         render(){
@@ -53,14 +53,21 @@ export default (Elem) => {
                     onMouseUp={this.onMouseUp}
                     onClick = {this.onClick}
                 >
-                    <Elem {...this.props}/>
+                    <Elem
+                        isSelected={
+                            ~this.props.selectedFiles.findIndex(
+                                (item) =>
+                                            item.path === this.props.path)
+                        }
+                        {...this.props}/>
                 </div>
             );
         }
     }
 
     let stateToProps = (state) => ({
-       selectMode: state.select.selectMode
+       selectMode: state.select.selectMode,
+       selectedFiles: state.select.selectedFiles
     }),
     dispatchToProps = (dispatch) => {
         return {
