@@ -34,13 +34,13 @@ export default (state = initialState, {type, payload}) => {
         case FILES_DELETE:
             //loop each file
             payload.forEach((item) => {
-                path = item.split('/').filter((e) => !!e);
+                path = item.path.split('/').filter((e) => !!e);
                 //get parent dir of directory item
-                if(item.endsWith('/'))
+                if(item.isDir)
                     path.pop();
                 //get link on the dir
                dir = getDir(state.value, path);
-               delete dir[item.split('/').filter((e) => e).pop()];
+               delete dir[item.path.split('/').filter((e) => e).pop()];
             });
 
             return R.clone(state);

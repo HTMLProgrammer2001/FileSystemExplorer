@@ -12,22 +12,28 @@ export default (Elem) => {
         constructor(props){
             super(props);
 
+            let obj = {
+                path: props.path,
+                name: props.name,
+                isDir: props.isDir
+            };
+
             //select mode timer
             this.timer = null;
 
             //bind func
             this.onTimer = this.onTimer.bind(this);
-            this.onMouseDown = this.onMouseDown.bind(this, props.path);
+            this.onMouseDown = this.onMouseDown.bind(this, obj);
             this.onMouseUp = this.onMouseUp.bind(this);
-            this.onClick = this.onClick.bind(this, props.path);
+            this.onClick = this.onClick.bind(this, obj);
         }
 
         onTimer(){
             this.props.toggleSelect();
         }
 
-        onMouseDown(path){
-            this.timer = setTimeout(this.onTimer, 500, path);
+        onMouseDown(){
+            this.timer = setTimeout(this.onTimer, 500);
         }
 
         onMouseUp(){
@@ -35,9 +41,9 @@ export default (Elem) => {
                 clearTimeout(this.timer);
         }
 
-        onClick(path){
+        onClick(itemObj){
             if(this.props.selectMode)
-                this.props.toggleFile(path);
+                this.props.toggleFile(itemObj);
         }
 
         render(){

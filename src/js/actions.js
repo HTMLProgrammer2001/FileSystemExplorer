@@ -13,8 +13,8 @@ export const toggleSelect = () => (dispatch) => {
     dispatch({type: SELECT_TOGGLE_MODE});
 };
 
-export const toggleFile = (path) => (dispatch) => {
-  dispatch({type: SELECT_TOGGLE_FILE, payload: path});
+export const toggleFile = (itemObj) => (dispatch) => {
+  dispatch({type: SELECT_TOGGLE_FILE, payload: itemObj});
 };
 
 export const clearSelect = () => (dispatch) => {

@@ -66,7 +66,8 @@ let conf = {
 			css: path.resolve(__dirname, 'src/css/'),
 			assets: path.resolve(__dirname, 'src/assets/'),
 			modules: path.resolve(__dirname, 'node_modules')
-		}
+		},
+        extensions: ['.js', '.jsx']
 	}
 };
 

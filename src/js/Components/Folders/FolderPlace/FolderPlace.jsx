@@ -109,9 +109,12 @@ class FolderPlace extends React.Component{
                                         key = {index}
                                         Listener = {this.openListener}
                                         selectMode = {this.props.selectMode}
+                                        isDir = {item.isDir}
                                         isSelected = {
                                             isSelected &&
-                                                this.props.selectedFiles.includes(path + item.name + '/')
+                                                ~this.props.selectedFiles.findIndex((e) => {
+                                                    return path + item.name + '/' === e.path;
+                                                })
                                         }
                                         isChecked = {isChecked}/>
                                             :
@@ -122,9 +125,12 @@ class FolderPlace extends React.Component{
                                         key = {index}
                                         Listener = {this.openListener}
                                         selectMode = {this.props.selectMode}
+                                        isDir = {item.isDir}
                                         isSelected = {
                                              this.props.selectMode &&
-                                             this.props.selectedFiles.includes(path + item.name)
+                                             ~this.props.selectedFiles.findIndex((e) => {
+                                                 return path + item.name === e.path;
+                                             })
                                         }
                                         isChecked = {isChecked}/>;
                         })}

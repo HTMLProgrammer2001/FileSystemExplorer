@@ -66,6 +66,8 @@ class FileSystem
     }
 
     public static function delete($paths){
+        if(is_array($paths))
+
         foreach ($paths as $path){
             if(!file_exists($path)) {
                 echo "$path not exist";

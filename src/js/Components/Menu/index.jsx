@@ -3,18 +3,19 @@ import {connect} from "react-redux";
 import classnames from 'classnames';
 
 import {
-    addFiles,
-    deleteFiles,
     renameFile
 } from 'js/actions';
+
+//import menu items
+import CreateFile from './Buttons/CreateFile';
+import CreateFolder from './Buttons/CreateFolder';
+import DeleteFiles from './Buttons/DeleteFiles';
 
 class Menu extends React.Component{
     constructor(props){
         super(props);
 
         //bind functions to this context
-        this.deleteItems = this.deleteItems.bind(this);
-        this.create = this.create.bind(this);
         this.renameItem = this.renameItem.bind(this);
         this.moveItems = this.moveItems.bind(this);
     }
@@ -24,21 +25,9 @@ class Menu extends React.Component{
         return (
             <div className="d-flex justify-content-center">
                 <div className="d-flex col-sm-9 justify-content-between">
-                    <div className='menu-item w-100 border p-1 text-center'
-                         onClick = {() => this.create('file')}>Создать файл</div>
-
-                    <div className='menu-item w-100 border p-1 text-center'
-                         onClick = {() => this.create('folder')}>Создать папку</div>
-
-                    <div
-                        className={
-                            classnames('menu-item w-100 border p-1 text-center', {
-                                'text-muted': !this.props.selectedFiles.length
-                            })
-                        }
-                        onClick={this.deleteItems}>
-                            Удалить
-                    </div>
+                    <CreateFile/>
+                    <CreateFolder/>
+                    <DeleteFiles/>
 
                     <div
                         className={
@@ -64,41 +53,6 @@ class Menu extends React.Component{
                 </div>
             </div>
         );
-    }
-
-    async deleteItems(){
-        if(!this.props.selectedFiles.length)
-            return;
-
-        await this.fetchApi({
-           type: 'delete',
-           paths: JSON.stringify(this.props.selectedFiles)
-        });
-
-        this.props.dispatch(deleteFiles(this.props.selectedFiles));
-    }
-
-    async create(type){
-        let fileName = prompt('Enter name');
-        if(!fileName)
-            return;
-
-        //call api
-        await this.fetchApi({
-           type: 'create',
-           createType: type,
-           path: this.props.selectedPath + fileName
-        });
-
-        this.props.dispatch(addFiles({
-            path: this.props.selectedPath.split('/'),
-            value: [{
-                path: this.props.selectedPath + fileName + (type === 'file' ? '' : '/'),
-                name: fileName,
-                isDir: type !== 'file',
-                type: fileName.slice(fileName.lastIndexOf('.') + 1)
-            }]
-        }));
     }
 
     async renameItem(){
