@@ -2,6 +2,7 @@ import {
     SELECT_TOGGLE_FILE,
     SELECT_TOGGLE_MODE,
     CHANGE_PATH,
+    CHANGE_ACTIVE_ITEM,
     FILES_ADD,
     FILES_DELETE,
     SELECT_CLEAR,
@@ -23,6 +24,10 @@ export const clearSelect = () => (dispatch) => {
 
 export const changePath = (path) => (dispatch) => {
   dispatch({type: CHANGE_PATH, payload: path});
+};
+
+export const changeActiveItem = (file) => (dispatch) => {
+  dispatch({type: CHANGE_ACTIVE_ITEM, payload: file});
 };
 
 export const addFiles = (payload) => (dispatch) => {

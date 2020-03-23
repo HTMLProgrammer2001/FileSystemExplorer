@@ -1,3 +1,5 @@
+import fetchApi from 'js/helpers/api';
+
 class ViewerText extends React.Component{
     constructor(props){
         super(props);
@@ -64,16 +66,12 @@ class ViewerText extends React.Component{
     }
 
     async loadFile(){
-        let fileContent = await fetch('http://explorer/dist/php/api.php', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/x-www-form-urlencoded'
-            },
-            'mode': 'cors',
-            body: 'type=getFileContent&path=' + this.props.path
-        });
+        let fileContentResponse = await fetchApi({
+           type: 'getFileContent',
+           path: this.props.path
+        }),
 
-        fileContent = await fileContent.text();
+        fileContent = await fileContentResponse.text();
 
         this.setState({
             content: fileContent,
@@ -88,13 +86,10 @@ class ViewerText extends React.Component{
     }
 
     async save(){
-        await fetch('http://explorer/dist/php/api.php', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/x-www-form-urlencoded'
-            },
-            'mode': 'cors',
-            body: 'type=saveFileContent&path=' + this.props.path + '&content=' + this.state.content
+        await fetchApi({
+           type: 'saveFileContent',
+           path: this.props.path,
+           content: this.state.content
         });
 
         this.props.editModeChange();

@@ -5,7 +5,7 @@ import {connect} from 'react-redux';
 import {
     toggleSelect,
     toggleFile
-} from './actions';
+} from './redux/actions';
 
 export default (Elem) => {
     class ElemWithSelect extends React.Component{
@@ -37,9 +37,9 @@ export default (Elem) => {
 
         onClick(){
             let obj = {
-                path: this.props.path,
-                name: this.props.name,
-                isDir: this.props.isDir
+                path: this.props.item.path,
+                name: this.props.item.name,
+                isDir: this.props.item.isDir
             };
 
             if(this.props.selectMode)
@@ -57,7 +57,7 @@ export default (Elem) => {
                         isSelected={
                             ~this.props.selectedFiles.findIndex(
                                 (item) =>
-                                            item.path === this.props.path)
+                                            item.path === this.props.item.path)
                         }
                         {...this.props}/>
                 </div>

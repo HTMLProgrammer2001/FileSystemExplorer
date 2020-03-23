@@ -3,6 +3,7 @@ export const SELECT_TOGGLE_FILE = 'SELECT_TOGGLE_FILE';
 export const SELECT_CLEAR = 'SELECT_CLEAR';
 
 export const CHANGE_PATH = 'CHANGE_PATH';
+export const CHANGE_ACTIVE_ITEM = 'CHANGE_ACTIVE_ITEM';
 
 export const FILES_ADD = 'FILES_ADD';
 export const FILES_DELETE = 'FILES_DELETE';

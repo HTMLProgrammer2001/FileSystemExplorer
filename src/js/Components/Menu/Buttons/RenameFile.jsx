@@ -3,8 +3,8 @@ import classnames from 'classnames';
 
 import {
     renameFile
-} from "js/actions";
-import fetchApi from 'js/api';
+} from "js/redux/actions";
+import fetchApi from 'js/helpers/api';
 
 function RenameFile(props){
     //create function
@@ -42,7 +42,7 @@ function RenameFile(props){
 
 const stateToProps = (state) => ({
     selectedFiles: state.select.selectedFiles,
-    selectedPath: state.select.selectedPath
+    selectedPath: state.active.path
 });
 
 export default connect(stateToProps, null)(RenameFile);

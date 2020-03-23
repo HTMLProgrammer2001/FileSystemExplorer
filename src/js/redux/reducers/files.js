@@ -5,9 +5,10 @@ import {
     FILES_DELETE,
     FILES_RENAME,
     FILES_MOVE
-} from 'js/actionTypes';
+} from '../actionTypes';
 
-import {getDir} from "js/fileSelector";
+import findType from 'js/helpers/findType';
+import {getDir} from "js/helpers/fileSelector";
 
 const initialState = {
     value: {}
@@ -24,6 +25,7 @@ export default (state = initialState, {type, payload}) => {
             dir = getDir(state.value, payload.path);
 
             payload.value.forEach((item) => {
+                item['type'] = findType(item.type);
                 dir[item.name] = item;
 
                 if(item.isDir)

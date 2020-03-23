@@ -1,15 +1,16 @@
 import React from 'react';
 import {connect} from "react-redux";
+import {TransitionGroup, Transition} from 'react-transition-group';
 
 import Folder from './Items/Folder';
 import File from './Items/File';
 import {
     changePath,
-    addFiles
-} from "js/actions";
-import {getDir} from "js/fileSelector";
-
-require('babel-polyfill');
+    addFiles,
+    changeActiveItem
+} from "js/redux/actions";
+import {getDir} from "js/helpers/fileSelector";
+import fetchApi from 'js/helpers/api';
 
 class FolderPlace extends React.Component{
     constructor(props){
@@ -27,7 +28,6 @@ class FolderPlace extends React.Component{
         this.state = {
             //scroll
             scrollTop: 0,
-
             open: {
               path: '',
               isDir: false
@@ -44,17 +44,14 @@ class FolderPlace extends React.Component{
 
         this.controller = new AbortController();
 
-        let folderContent = await fetch('http://explorer/dist/php/api.php', {
-            method: 'POST',
-            signal: this.controller.signal,
-            headers: {
-              'Content-Type': 'application/x-www-form-urlencoded'
-            },
-            mode: 'cors',
-            body: 'type=getFolderContent&path=' + this.props.path
-        });
+        let folderContentResponse = await fetchApi({
+            type: 'getFolderContent',
+            path: this.props.path
+        }, {
+            signal: this.controller.signal
+        }),
 
-        folderContent = await folderContent.json();
+        folderContent = await folderContentResponse.json();
         this.props.addFiles({...folderContent, path: folderContent.path.split('/')});
         this.setState({loaded: true});
 
@@ -86,41 +83,34 @@ class FolderPlace extends React.Component{
     render(){
         let path = this.props.path,
             state = this.state,
-            files = getDir(this.props.files, this.props.path.split('/'));
+            files = getDir(this.props.files, path.split('/'));
 
         return (
             <React.Fragment>
-
                 <div
                     className='folder mt-3 border'
                     ref = {this.ref}>
                     <div className='pr-0 list-group'>
-                        {
-                            !Object.values(files).length ? <div className="list-group-item border-0">Empty folder</div>
-                                :
-                            [].map.call(Object.values(files), (item, index) => {
-                                let isChecked = state.open.path === item.name;
+                            {
+                                !Object.values(files).length ?
+                                    <div className="list-group-item border-0">Empty folder</div>
+                                    :
+                                    [].map.call(Object.values(files), (item, index) => {
+                                        let isChecked = state.open.path === item.name;
 
-                                return item.isDir ?
-                                    <Folder
-                                        name = {item.name}
-                                        path = {path + item.name + '/'}
-                                        key = {index}
-                                        Listener = {this.openListener}
-                                        selectMode = {this.props.selectMode}
-                                        isDir = {item.isDir}
-                                        isChecked = {isChecked}/>
-                                            :
-                                    <File
-                                        name = {item.name}
-                                        path = {path + item.name}
-                                        ext = {item.type}
-                                        key = {index}
-                                        Listener = {this.openListener}
-                                        selectMode = {this.props.selectMode}
-                                        isDir = {item.isDir}
-                                        isChecked = {isChecked}/>;
-                        })}
+                                        return item.isDir ?
+                                            <Folder
+                                                item={item}
+                                                key = {index}
+                                                Listener = {this.openListener}
+                                                isChecked = {isChecked}/>
+                                                :
+                                            <File
+                                                item = {item}
+                                                key = {index}
+                                                Listener = {this.openListener}
+                                                isChecked = {isChecked}/>;
+                            })}
                     </div>
                 </div>
 
@@ -130,13 +120,13 @@ class FolderPlace extends React.Component{
                         key = {path + state.open.path + '/'}
                         path={path + state.open.path + '/'}
                     /> : ''}
-
             </React.Fragment>
         );
     }
 
     openListener(open) {
         this.props.changePath(this.props.path + (open.path ? open.path : ''));
+        this.props.changeActive(getDir(this.props.files, this.props.path.split('/'))[open.path]);
 
         if(!this.props.selectMode)
             this.setState({
@@ -150,7 +140,8 @@ const stateToProps = (state) => ({
 });
 
 const dispatchToProps = (dispatch) => ({
-   changePath: (path) => dispatch(changePath(path)),
+    changePath: (path) => dispatch(changePath(path)),
+    changeActive: (item) => dispatch(changeActiveItem(item)),
     addFiles: (payload) => dispatch(addFiles(payload))
 });
 

@@ -1,15 +1,11 @@
 import {
     SELECT_TOGGLE_MODE,
     SELECT_CLEAR,
-    SELECT_TOGGLE_FILE,
-    CHANGE_PATH
-} from 'js/actionTypes';
-
-let expPath = new URL(location.href).searchParams.get('path');
+    SELECT_TOGGLE_FILE
+} from '../actionTypes';
 
 const initialState = {
     selectMode: false,
-    selectedPath: expPath || './',
     selectedFiles: []
 };
 
@@ -18,11 +14,6 @@ export default (state = initialState, {type, payload}) => {
         index;
 
     switch (type) {
-        case CHANGE_PATH:
-            return Object.assign({}, state, {
-                selectedPath: payload
-            });
-
         case SELECT_TOGGLE_MODE:
             return Object.assign({}, state, {
                 selectMode: !state.selectMode,

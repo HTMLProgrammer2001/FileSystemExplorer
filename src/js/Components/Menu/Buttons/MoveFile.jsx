@@ -3,8 +3,8 @@ import classnames from 'classnames';
 
 import {
     moveFiles
-} from "js/actions";
-import fetchApi from 'js/api';
+} from "js/redux/actions";
+import fetchApi from 'js/helpers/api';
 
 function MoveFile(props){
     //create function
@@ -42,7 +42,7 @@ function MoveFile(props){
 
 const stateToProps = (state) => ({
     selectedFiles: state.select.selectedFiles,
-    selectedPath: state.select.selectedPath
+    selectedPath: state.active.path
 });
 
 export default connect(stateToProps, null)(MoveFile);

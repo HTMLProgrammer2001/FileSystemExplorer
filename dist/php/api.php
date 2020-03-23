@@ -19,8 +19,8 @@ if($_POST['type'] === 'getFolderContent'){
     echo json_encode($content);
 }
 
-if($_POST['type'] === 'getFileContent'){
-    $fileSystem = new FileSystem($_POST['path']);
+if($_POST['type'] === 'getFileContent' || $_GET['type'] === 'getFileContent'){
+    $fileSystem = new FileSystem($_POST['path'] ? $_POST['path'] : $_GET['path']);
 
     echo $fileSystem->getFileContent();
 }

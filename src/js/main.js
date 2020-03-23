@@ -13,7 +13,7 @@ import 'scss/style.scss';
 
 //import my components
 import Explorer from './Components/Explorer';
-import reducers from './reducers';
+import reducers from './redux/reducers';
 
 //init store
 let store = createStore(reducers, composeWithDevTools(applyMiddleware(thunk)));

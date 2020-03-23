@@ -1,3 +1,5 @@
+import {connect} from 'react-redux';
+
 //import types
 import Text from './ViewerTypes/ViewerText';
 import Video from './ViewerTypes/ViewerVideo';
@@ -9,43 +11,39 @@ class Viewer extends React.Component{
     constructor(props){
         super(props);
 
-        window.activeFile = this.activeFile.bind(this);
         this.editModeChange = this.editModeChange.bind(this);
 
         this.state = {
-            path: null,
-            type: null,
             editMode: false
         }
     }
 
     render(){
-        let viewState = this.state,
-            ViewContent = Unknown;
+        if(!this.props.activeItem || this.props.activeItem.isDir)
+            return null;
 
-        if(viewState.type == 'image')
-            ViewContent = Image;
-        else if(viewState.type == 'video')
-            ViewContent = Video;
-        else if(viewState.type == 'text')
-            ViewContent = Text;
-        else if(viewState.type == 'audio')
-            ViewContent = Audio;
+        let file = this.props.activeItem,
+            ViewContent = this.getView();
 
         return (
             <div className="d-flex justify-content-center">
                 <div className="col-sm-8 mt-4" id="file_picker">
 
-                    {viewState.path ? <ViewContent
-                        path = {viewState.path}
-                        editModeChange = {this.editModeChange}
-                        editMode = {this.state.editMode}/> : ''}
+                    {
+                        file.path ?
+                            <ViewContent
+                                path = {file.path}
+                                editModeChange = {this.editModeChange}
+                                editMode = {this.state.editMode}/>
+                                    :
+                            ''
+                    }
 
                     {
-                        viewState.path && !this.state.editMode ?
+                        file.path && !this.state.editMode ?
                             <div className="d-flex justify-content-between">
 
-                                <a href={'http://explorer/dist/php/file.php?path=' + viewState.path} download target="_blank" className="w-100 m-3">
+                                <a href={'http://explorer/dist/php/file.php?path=' + file.path} download target="_blank" className="w-100 m-3">
                                     <div className="btn btn-primary w-100">
 
                                         <i className="fas fa-download mx-2"></i>
@@ -71,11 +69,19 @@ class Viewer extends React.Component{
         );
     }
 
-    activeFile(path, type){
-        this.setState({
-            path,
-            type
-        })
+    getView(){
+        switch (this.props.activeItem.type) {
+            case 'image':
+                return Image;
+            case 'video':
+                return Video;
+            case 'text':
+                return Text;
+            case 'audio':
+                return Audio;
+            default:
+                return Unknown;
+        }
     }
 
     editModeChange(){
@@ -85,4 +91,9 @@ class Viewer extends React.Component{
     }
 }
 
-export default Viewer;
+const stateToProps = (state) => ({
+    activeItem: state.active.item,
+    selectedFiles: state.select.selectedFiles
+});
+
+export default connect(stateToProps, null)(Viewer);

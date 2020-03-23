@@ -51,6 +51,7 @@ class FileSystem
         //return dir info
         if(is_dir($path)){
             $fileInfo['isDir'] = true;
+            $fileInfo['path'] .= '/';
 
             return $fileInfo;
         }

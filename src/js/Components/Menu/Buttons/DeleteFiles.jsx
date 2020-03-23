@@ -3,8 +3,8 @@ import classnames from 'classnames';
 
 import {
     deleteFiles
-} from "js/actions";
-import fetchApi from 'js/api';
+} from "js/redux/actions";
+import fetchApi from 'js/helpers/api';
 
 function DeleteFiles(props){
     //create function
@@ -35,7 +35,7 @@ function DeleteFiles(props){
 
 const stateToProps = (state) => ({
     selectedFiles: state.select.selectedFiles,
-    selectedPath: state.select.selectedPath
+    selectedPath: state.active.path
 });
 
 export default connect(stateToProps, null)(DeleteFiles);
